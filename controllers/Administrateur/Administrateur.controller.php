@@ -29,6 +29,19 @@ class AdministrateurController extends MainController
     }
 
 
+    public function validation_modificationAdminLogin($login, $newLogin)
+    {
+
+        if ($this->administrateurManager->bdModificationAdminLoginUser($login, $newLogin)) {
+
+            Toolbox::ajouterMessageAlerte("La modification est effectuée", Toolbox::COULEUR_VERTE);
+        } else {
+            Toolbox::ajouterMessageAlerte("Aucune modification effectuée", Toolbox::COULEUR_ROUGE);
+        }
+        header("Location: " . URL . "administration/droits");
+    }
+
+
     public function validation_modificationAdminPrenom($login, $prenom)
     {
 

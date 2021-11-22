@@ -27,6 +27,8 @@ try {
             break;
         case "login":
             $visiteurController->login();
+
+
             break;
         case "validation_login":
             if (!empty($_POST['login']) && !empty($_POST['password'])) {
@@ -60,12 +62,7 @@ try {
                 header("Location: " . URL . "creerCompte");
             }
             break;
-            /*      case "renvoyerMailValidation":
-            $utilisateurController->renvoyerMailValidation($url[1]);
-            break;
-        case "validationMail":
-            $utilisateurController->validation_mailCompte($url[1], $url[2]);
-            break; */
+
         case "compte":
             if (!Securite::estConnecte()) {
                 Toolbox::ajouterMessageAlerte("Veuillez vous connecter !", Toolbox::COULEUR_ROUGE);
@@ -114,14 +111,6 @@ try {
                     case "suppressionCompte":
                         $utilisateurController->suppressionCompte();
                         break;
-                    case "validation_modificationImage":
-                        if ($_FILES['image']['size'] > 0) {
-                            $utilisateurController->validation_modificationImage($_FILES['image']);
-                        } else {
-                            Toolbox::ajouterMessageAlerte("Vous n'avez pas modifié l'image", Toolbox::COULEUR_ROUGE);
-                            header("Location: " . URL . "compte/profil");
-                        }
-                        break;
                     default:
                         throw new Exception("La page n'existe pas");
                 }
@@ -139,6 +128,11 @@ try {
                     case "droits":
                         $administrateurController->droits();
                         break;
+
+                    case "validation_modificationLogin":
+                        $administrateurController->validation_modificationAdminLogin($_POST['login'], $_POST['newLogin']);
+                        break;
+
                     case "validation_modificationPrenom":
                         $administrateurController->validation_modificationAdminPrenom($_POST['login'], $_POST['prenom']);
                         break;

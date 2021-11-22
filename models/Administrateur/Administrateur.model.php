@@ -1,5 +1,6 @@
 <?php
 require_once("./models/MainManager.model.php");
+require_once("./controllers/Utilisateur/Utilisateur.controller.php");
 
 class AdministrateurManager extends MainManager
 {
@@ -9,8 +10,24 @@ class AdministrateurManager extends MainManager
         $req->execute();
         $datas = $req->fetchAll(PDO::FETCH_ASSOC);
         $req->closeCursor();
+
+
         return $datas;
     }
+
+
+    public function bdModificationAdminLoginUser($login, $newLogin)
+    {
+        $req = "UPDATE utilisateurs set login = :newlogin WHERE login = :login";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":login", $login, PDO::PARAM_STR);
+        $stmt->bindValue(":newlogin", $newLogin, PDO::PARAM_STR);
+        $stmt->execute();
+        $estModifier = ($stmt->rowCount() > 0);
+        $stmt->closeCursor();
+        return $estModifier;
+    }
+
 
 
     public function bdModificationAdminPrenomUser($login, $prenom)
