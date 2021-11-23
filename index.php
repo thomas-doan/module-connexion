@@ -83,7 +83,7 @@ try {
                         break;
                     case "validation_modificationLogin":
                         $utilisateurController->validation_modificationLogin(Securite::secureHTML($_POST['login']));
-                        $utilisateurController->deconnexion();
+
                         break;
                     case "validation_modificationPrenom":
                         $utilisateurController->validation_modificationPrenom(Securite::secureHTML($_POST['prenom']));

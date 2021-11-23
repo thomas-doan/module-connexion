@@ -1,7 +1,9 @@
 <main>
     <article>
         <div class="wrapper">
-            <div class="static-txt">La force de la nature</div>
+            <div class="static-txt">
+                <p>La force de la nature</p>
+            </div>
             <ul class="dynamic-txts">
                 <li><span>ICI</span></li>
                 <li><span>AVEC</span></li>

@@ -2,6 +2,8 @@
 require_once("./controllers/MainController.controller.php");
 require_once("./models/Administrateur/Administrateur.model.php");
 
+
+
 class AdministrateurController extends MainController
 {
     private $administrateurManager;
@@ -31,12 +33,29 @@ class AdministrateurController extends MainController
 
     public function validation_modificationAdminLogin($login, $newLogin)
     {
+        if ($this->administrateurManager->verifLoginDisponible($newLogin)) {
+            if ($this->administrateurManager->bdModificationAdminLoginUser($login, $newLogin)) {
 
-        if ($this->administrateurManager->bdModificationAdminLoginUser($login, $newLogin)) {
+                $utilisateur = $this->administrateurManager->getUserAdminInformation($newLogin);
+                $_SESSION['profil']["login"] = $utilisateur['login'];
 
-            Toolbox::ajouterMessageAlerte("La modification est effectuée", Toolbox::COULEUR_VERTE);
+                $_SESSION['profil']["role"] = $utilisateur['role'];
+
+                $utilisateurs = $this->administrateurManager->getUtilisateurs();
+                $data_page = [
+                    "page_description" => "Gestion des droits",
+                    "page_title" => "Gestion des droits",
+                    "utilisateurs" => $utilisateurs,
+                    "view" => "views/Administrateur/droits.view.php",
+                    "template" => "views/common/template.php"
+                ];
+                $this->genererPage($data_page);
+
+                /*                 Toolbox::ajouterMessageAlerte("La modification est effectuée", Toolbox::COULEUR_VERTE);
+ */
+            }
         } else {
-            Toolbox::ajouterMessageAlerte("Aucune modification effectuée", Toolbox::COULEUR_ROUGE);
+            Toolbox::ajouterMessageAlerte("login déjà utilisé", Toolbox::COULEUR_ROUGE);
         }
         header("Location: " . URL . "administration/droits");
     }

@@ -15,6 +15,22 @@ class AdministrateurManager extends MainManager
         return $datas;
     }
 
+    public function getUserAdminInformation($login)
+    {
+        $req = "SELECT * FROM utilisateurs WHERE login = :login";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":login", $login, PDO::PARAM_STR);
+        $stmt->execute();
+        $resultat = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $resultat;
+    }
+
+    public function verifLoginDisponible($login)
+    {
+        $utilisateur = $this->getUserAdminInformation($login);
+        return empty($utilisateur);
+    }
 
     public function bdModificationAdminLoginUser($login, $newLogin)
     {

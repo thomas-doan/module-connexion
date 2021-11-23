@@ -72,10 +72,27 @@ class UtilisateurController extends MainController
 
     public function validation_modificationLogin($login)
     {
-        if ($this->utilisateurManager->bdModificationLoginUser($_SESSION['profil']['login'], $login)) {
-            Toolbox::ajouterMessageAlerte("La modification est effectuée, reconnectez-vous", Toolbox::COULEUR_VERTE);
+        if ($this->utilisateurManager->verifLoginDisponible($login)) {
+            if ($this->utilisateurManager->bdModificationLoginUser($_SESSION['profil']['login'], $login)) {
+                $datas = $this->utilisateurManager->getUserInformation($login);
+                $_SESSION['profil']["login"] = $datas['login'];
+
+                $_SESSION['profil']["role"] = $datas['role'];
+                $data_page = [
+                    "page_description" => "Page de profil",
+                    "page_title" => "Page de profil",
+                    "utilisateur" => $datas,
+                    "page_javascript" => ['profil.js'],
+                    "view" => "views/Utilisateur/profil.view.php",
+                    "template" => "views/common/template.php"
+                ];
+                $this->genererPage($data_page);
+
+
+                /* Toolbox::ajouterMessageAlerte("La modification est effectuée, reconnectez-vous", Toolbox::COULEUR_VERTE); */
+            }
         } else {
-            Toolbox::ajouterMessageAlerte("Aucune modification effectuée", Toolbox::COULEUR_ROUGE);
+            Toolbox::ajouterMessageAlerte("Le login est déjà utilisé", Toolbox::COULEUR_ROUGE);
         }
         header("Location: " . URL . "compte/profil");
     }
